@@ -16,10 +16,7 @@ class Movie extends Component {
         }
      }
 
-     
-
-    componentDidMount(){
-        let movie =this.props.match.params.id;
+    callApi(movie){
         axios
         .get('https://api.themoviedb.org/3/movie/'+movie+'?api_key=1de101fa99d9b77ac2154b64d13847bc&language=en-US')
         .then((response)=>{
@@ -38,11 +35,26 @@ class Movie extends Component {
 
             let details=this.state.details;
             this.setState({ details:details,recomend:response.data.results})
-
+            window.scroll(0,0);
             console.log(this.state)
             
 
         })
+        .catch(function(err){
+            console.log(err)
+        })
+    } 
+
+    componentDidUpdate(prevProps){
+        if(prevProps.match.params.id !== this.props.match.params.id){
+            this.callApi(this.props.match.params.id);
+        }
+    }
+
+    componentDidMount(){
+        let movie =this.props.match.params.id;
+        this.callApi(movie);
+       
 
        
     }
